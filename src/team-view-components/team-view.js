@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import ViewData from "./data";
+//import ViewData from "./data";
 import ChallengeSection from "./challenge-section";
 
 /*  Class to display scoreboard for a single team
 *   props: teamName - string
-*          team info  - array of team scores for various challenges
+*          teanInfo - array of team scores for various challenges
 *          challenges - array of challenge objects
 */
 
 class TeamView extends Component {
   render() {
-    console.log("ViewData:", ViewData); //todo
-    const teanInfo = ViewData.TeamScores[this.props.teamId];
-    console.log("teamInfo=", teanInfo); //todo
+    const ViewData = this.props.ViewData;
+    const teamInfo = ViewData.TeamScores[this.props.teamId];
     const scores = ViewData.TeamScoresMulti[this.props.teamId];
+
     return (
       <div className="team-view">
         <h1>{this.props.teamName}</h1>
@@ -30,6 +30,7 @@ class TeamView extends Component {
             <ChallengeSection
               challengeData={challenge}
               key={challenge.id}
+              challengeId={challenge.id}
               scores={scores}
             />
           );

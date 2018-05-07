@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+const $ = window.$;
 /*  Class to display scoreboard element for a single Challenge
 *   for a single team
 *
@@ -7,6 +7,32 @@ import React, { Component } from "react";
 */
 
 class ChallengeSection extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+      final: 0
+    };
+  }
+  componentDidMount() {
+    const _this = this;
+    this.$node = $(this.refs.accordian);
+    this.$node.on("hidden.bs.collapse", function() {
+      _this.setState({
+        open: false
+      });
+    });
+    this.$node.on("shown.bs.collapse", function() {
+      _this.setState({
+        open: true
+      });
+    });
+  }
+
+  toggleAccordianState() {
+    this.setState({ open: !this.state.open });
+  }
+
   convertTimestamp(timestamp) {
     let ampm = "am";
     // Create a new JavaScript Date object based on the timestamp
@@ -40,7 +66,6 @@ class ChallengeSection extends Component {
   }
 
   displayScores(scores) {
-    //console.log("displayScores(scores)", scores); //todo
     return [0, 1, 2, 3, 4, 5].map((item, index, array) => {
       return (
         <td key={index}>
@@ -53,7 +78,6 @@ class ChallengeSection extends Component {
   }
 
   displaySingleRun({ run, order, numRuns, finalScore }) {
-    //console.log("run: ", run); //todo
     const total = run.scores ? this.totalScore(run.scores) : 0;
 
     return (
@@ -76,14 +100,14 @@ class ChallengeSection extends Component {
     );
   }
 
-  displayRuns(runs) {
+  displayRuns({ runs, finalScore }) {
     //filter out data from other challenges
-    let rows = runs.filter(run => {
+    /*  let rows = runs.filter(run => {
       return run.chalId === this.props.challengeData.id;
-    });
+    });*/
 
     //if no runs return
-    if (!rows.length) {
+    if (!runs.length) {
       return (
         <tr>
           <td style={{ color: "#ccc", backgroundColor: "#f7f7f7" }} colSpan="8">
@@ -92,10 +116,8 @@ class ChallengeSection extends Component {
         </tr>
       );
     }
-    console.log("rows", rows); //todo
     //otherwise figure final score & create row for each run
-    const finalScore = this.getFinalScore(rows);
-    rows = rows.map((run, index, array) => {
+    const rows = runs.map((run, index, array) => {
       return this.displaySingleRun({
         run,
         order: index + 1,
@@ -108,44 +130,67 @@ class ChallengeSection extends Component {
   }
 
   render() {
-    //console.log(
-    //"scores=",
-    //this.props.scores,
-    //"challenge=",
-    //this.props.challengeData
-    //"rows=",
-    //this.displayRuns(this.props.scores)
-    //); //todo
+    const runs = this.props.scores.filter(run => {
+      return run.chalId === this.props.challengeData.id;
+    });
+    const finalScore = this.getFinalScore(runs);
 
     return (
       <div>
-        <table className="table table-bordered" style={{ marginBottom: "0" }}>
-          <thead>
-            <tr>
-              <th style={{ padding: "8px" }} colSpan="9" className="info">
-                {this.props.challengeData.display_name}
-                <span className="pull-right">
-                  {this.props.challengeData.points}
-                  {"  Points Possible"}
-                </span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Score Elements </th>
-              <th>1</th>
-              <th>2</th>
-              <th>3</th>
-              <th>4</th>
-              <th>5</th>
-              <th>6</th>
-              <th>Total</th>
-              <th>Score</th>
-            </tr>
-            {this.displayRuns(this.props.scores)}
-          </tbody>
-        </table>
+        <div
+          style={{
+            textAlign: "left",
+            padding: "5px",
+            backgroundColor: " #f2f2f2",
+            borderBottom: "1px solid #ccc"
+          }}
+        >
+          <span
+            style={{ marginRight: "5px" }}
+            className={
+              "glyphicon " +
+              (this.state.open ? "glyphicon-minus " : "glyphicon-plus ")
+            }
+          />
+          <a
+            href={`#table${this.props.challengeId}`}
+            data-toggle="collapse"
+            style={{ fontWeight: "bold", fontSize: "1em" }}
+          >
+            {this.props.challengeData.display_name}
+          </a>
+
+          <span className="pull-right">
+            {finalScore}/{this.props.challengeData.points}
+            {"  Points"}
+          </span>
+        </div>
+        <div
+          id={`table${this.props.challengeId}`}
+          className="collapse"
+          ref="accordian"
+        >
+          <table
+            className="table table-bordered"
+            style={{ marginBottom: "0" }}
+            id="demo"
+          >
+            <tbody>
+              <tr>
+                <th>Score Elements </th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>Total</th>
+                <th>Score</th>
+              </tr>
+              {this.displayRuns({ runs, finalScore })}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
