@@ -17,12 +17,12 @@ class ChallengeSection extends Component {
   componentDidMount() {
     const _this = this;
     this.$node = $(this.refs.accordian);
-    this.$node.on("hidden.bs.collapse", function() {
+    this.$node.on("hide.bs.collapse", function() {
       _this.setState({
         open: false
       });
     });
-    this.$node.on("shown.bs.collapse", function() {
+    this.$node.on("show.bs.collapse", function() {
       _this.setState({
         open: true
       });
