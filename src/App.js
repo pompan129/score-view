@@ -13,6 +13,8 @@ class App extends Component {
           teamId="277"
           teamName="Cool Team Name Here"
           ViewData={ViewData}
+          challengeData={ViewData.ChallengeData}
+          teamScores={ViewData.TeamScoresMulti[277]}
         />
       </div>
     );

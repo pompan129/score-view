@@ -101,11 +101,6 @@ class ChallengeSection extends Component {
   }
 
   displayRuns({ runs, finalScore }) {
-    //filter out data from other challenges
-    /*  let rows = runs.filter(run => {
-      return run.chalId === this.props.challengeData.id;
-    });*/
-
     //if no runs return
     if (!runs.length) {
       return (
@@ -141,7 +136,7 @@ class ChallengeSection extends Component {
           style={{
             textAlign: "left",
             padding: "5px",
-            backgroundColor: " #f2f2f2",
+            backgroundColor: "#d9edf7",
             borderBottom: "1px solid #ccc"
           }}
         >

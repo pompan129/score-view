@@ -10,9 +10,8 @@ import ChallengeSection from "./challenge-section";
 
 class TeamView extends Component {
   render() {
-    const ViewData = this.props.ViewData;
-    const teamInfo = ViewData.TeamScores[this.props.teamId];
-    const scores = ViewData.TeamScoresMulti[this.props.teamId];
+    const scores = this.props.teamScores;
+    const challengeData = this.props.challengeData;
 
     return (
       <div className="team-view">
@@ -25,7 +24,7 @@ class TeamView extends Component {
             <li className="active">Team Score</li>
           </ul>
         </div>
-        {ViewData.ChallengeData.map(challenge => {
+        {challengeData.map(challenge => {
           return (
             <ChallengeSection
               challengeData={challenge}
