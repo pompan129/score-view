@@ -12,7 +12,6 @@ class App extends Component {
         <TeamView
           teamId="277"
           teamName="Cool Team Name Here"
-          ViewData={ViewData}
           challengeData={ViewData.ChallengeData}
           teamScores={ViewData.TeamScoresMulti[277]}
         />
