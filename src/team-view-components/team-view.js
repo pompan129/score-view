@@ -9,9 +9,30 @@ import ChallengeSection from "./challenge-section";
 */
 
 class TeamView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      accordians: {},
+      expanded: false
+    };
+  }
+
+  expandAll() {
+    const accordians = this.state.accordians;
+    const showOrHide = this.state.expanded ? "hide" : "show";
+
+    for (const key in accordians) {
+      if (accordians.hasOwnProperty(key)) {
+        accordians[key].collapse(showOrHide);
+      }
+    }
+    this.setState({ expanded: !this.state.expanded });
+  }
+
   render() {
     const scores = this.props.teamScores;
     const challengeData = this.props.challengeData;
+    const accordianObject = this.state.accordians;
 
     return (
       <div className="team-view">
@@ -24,6 +45,19 @@ class TeamView extends Component {
             <li className="active">Team Score</li>
           </ul>
         </div>
+        <div style={{ textAlign: "right" }}>
+          <a
+            onClick={() => this.expandAll()}
+            style={{
+              marginRight: "15px",
+              fontWeight: "bold",
+              cursor: "pointer"
+            }}
+          >
+            {this.state.expanded ? "Collapse " : "Expand "}All
+          </a>
+        </div>
+        <div />
         {challengeData.map(challenge => {
           return (
             <ChallengeSection
@@ -31,6 +65,7 @@ class TeamView extends Component {
               key={challenge.id}
               challengeId={challenge.id}
               scores={scores}
+              accordianObject={accordianObject}
             />
           );
         })}

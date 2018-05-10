@@ -27,6 +27,7 @@ class ChallengeSection extends Component {
         open: true
       });
     });
+    this.props.accordianObject[this.props.challengeId] = this.$node;
   }
 
   toggleAccordianState() {
